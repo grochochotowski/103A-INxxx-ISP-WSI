@@ -1,9 +1,8 @@
 import tkinter as tk
 import numpy as np
 
-from tkinter import ttk
-from a2_main import steepest_descent, visualize, booth
-from cec2017.functions import f1, f2, f3
+from .a2_main import steepest_descent, visualize, booth
+from src.cec2017.functions import f1, f2, f3
 
 # ===================== RUN ALGORITHM =====================
 def run_algorithm():
