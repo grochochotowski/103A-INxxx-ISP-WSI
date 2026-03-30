@@ -5,14 +5,18 @@ from src.cec2017.functions import f2, f13
 BUDGET = 10000
 DIMENSION = 10
 LB, UB = -100, 100
+SIGMA = 3
+mu_values = [4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048]
 
 def evolutionary_algorithm(fun, mu, sigma, budget):
+    calls = mu
+
     # Initialize population
     population = np.random.uniform(LB, UB, (mu, DIMENSION))
     fitness = np.array([fun(ind) for ind in population])
 
     # Calculate iterations
-    t_max = budget // mu
+    t_max = (budget // mu) - 1
 
     for t in range(t_max):
         new_population = []
@@ -32,22 +36,30 @@ def evolutionary_algorithm(fun, mu, sigma, budget):
 
         population = np.array(new_population)
         fitness = np.array([fun(ind) for ind in population])
-    return np.min(fitness)
+        calls += mu
+
+    return np.min(fitness), calls
 
 # Main loop through functions
 for fun in [f2, f13]:
-    path_collection = []
-    results = []
-    best_val = float('inf')
-    best_coords = None
+    print(f"\nTesting function: {fun.__name__}")
+    print(f"{'mu':>5} | {'Mean':>15} | {'Std':>15} | {'Best':>15} | {'Worst':>15} | {'Calls':>12}")
+    print("-" * 92)
 
-    # Loop in function for 25 test cases
-    for _ in range(25):
-        ... = np.random.uniform(-100, 100, 10)
-        optimum, path = ...
-        path_collection.append(path)
-        current_val = fun(optimum)
-        results.append(current_val)
-        if best_val > current_val:
-            best_val = current_val
-            best_coords = optimum
+    for mu in mu_values:
+        results = []
+        last_calls = 0
+
+        for _ in range(25):
+            final_best, total_calls = evolutionary_algorithm(fun, mu, SIGMA, BUDGET)
+            results.append(final_best)
+            last_calls = total_calls
+
+        # Calculate stats
+        mean_val = np.mean(results)
+        std_val = np.std(results)
+        min_val = np.min(results)
+        max_val = np.max(results)
+
+        # Print formatted results
+        print(f"{mu:5d} | {mean_val:15.2f} | {std_val:15.2f} | {min_val:15.2f} | {max_val:15.2f} | {last_calls:12.2f}")
