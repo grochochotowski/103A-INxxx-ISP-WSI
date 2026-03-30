@@ -206,3 +206,7 @@ __marimo__/
 # !data/raw/.gitkeep
 # data/processed/*
 # !data/processed/.gitkeep
+*.pkl
+
+# CEC2017
+**/cec2017/
