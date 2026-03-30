@@ -209,4 +209,4 @@ __marimo__/
 *.pkl
 
 # CEC2017
-**/cec2017/
+src/cec2017/
