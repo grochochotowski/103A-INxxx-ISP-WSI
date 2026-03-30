@@ -1,12 +1,38 @@
 import numpy as np
 from src.cec2017.functions import f2, f13
 
-# Numebr of iterations: tmax=budget/mu
-# mu = number of
-
+# Global constraints
 BUDGET = 10000
 DIMENSION = 10
 LB, UB = -100, 100
+
+def evolutionary_algorithm(fun, mu, sigma, budget):
+    # Initialize population
+    population = np.random.uniform(LB, UB, (mu, DIMENSION))
+    fitness = np.array([fun(ind) for ind in population])
+
+    # Calculate iterations
+    t_max = budget // mu
+
+    for t in range(t_max):
+        new_population = []
+        for _ in range(mu):
+            idx1, idx2 = np.random.choice(mu, 2, replace=False)
+
+            # Choose parent
+            if fitness[idx1] < fitness[idx2]:
+                parent = population[idx1]
+            else:
+                parent = population[idx2]
+
+            # Create new child from the parent
+            child = parent + np.random.normal(0, sigma, DIMENSION)
+            child = np.clip(child, LB, UB)
+            new_population.append(child)
+
+        population = np.array(new_population)
+        fitness = np.array([fun(ind) for ind in population])
+    return np.min(fitness)
 
 # Main loop through functions
 for fun in [f2, f13]:
