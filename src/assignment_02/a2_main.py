@@ -94,12 +94,13 @@ for fun in [f2, f13]:
         print(f"{s:7.1f} | {current_mean:20.2f} | {np.std(sig_results):20.2f} | {np.min(sig_results):20.2f} | {np.max(sig_results):20.2f} | {calls_sigma:12.0f}")
 
     # Testing 5x budget impact
+    best_sigma = min(sigma_means, key=sigma_means.get)
+
     print(f"\n\nBudget Impact Analysis")
-    print(f"mu={best_mu}, sigma={SIGMA}, budget={BUDGET_5X}")
+    print(f"mu={best_mu}, sigma={best_sigma}, budget={BUDGET_5X}")
     print(f"{'Mean':>20} | {'Std':>20} | {'Best':>20} | {'Worst':>20} | {'Calls':>12}")
     print("-" * 104)
 
-    best_sigma = min(sigma_means, key=sigma_means.get)
     final_results = []
     calls_budget = 0
     for _ in range(25):
