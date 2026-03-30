@@ -45,7 +45,8 @@ def evolutionary_algorithm(fun, mu, sigma, budget):
 
 # Main loop through functions
 for fun in [f2, f13]:
-    print(f"\nTesting function: {fun.__name__} - (sigma=3, budget=10k)")
+    print(f"\n\n============================= Testing function: {fun.__name__} =============================")
+    print(f"sigma=3, budget=10k")
     print(f"{'mu':>5} | {'Mean':>15} | {'Std':>15} | {'Best':>15} | {'Worst':>15} | {'Calls':>12}")
     print("-" * 92)
 
@@ -74,9 +75,10 @@ for fun in [f2, f13]:
     best_mu = min(mu_means, key=mu_means.get)
 
     # Testing Sigma impact
-    print(f"--- Starting Sigma Impact Analysis for {fun.__name__} with mu={best_mu} and budget={BUDGET} ---")
-    print(f"{'sigma':>7} | {'Mean':>15} | {'Std':>15} | {'Best':>15} | {'Calls':>10}")
-    print("-" * 75)
+    print(f"\n\nSigma Impact Analysis for {fun.__name__}")
+    print(f"mu={best_mu}, budget={BUDGET}")
+    print(f"{'sigma':>7} | {'Mean':>20} | {'Std':>20} | {'Best':>20} | {'Worst':>20} | {'Calls':>12}")
+    print("-" * 114)
 
     sigma_means = {}
     for s in best_mu_sigma_variations:
@@ -84,13 +86,24 @@ for fun in [f2, f13]:
         calls_sigma = 0
 
         for _ in range(25):
-            res, calls_sigma = evolutionary_algorithm(fun, best_mu, s, BUDGET)
-            sig_results.append(res)
+            results_sigma, calls_sigma = evolutionary_algorithm(fun, best_mu, s, BUDGET)
+            sig_results.append(results_sigma)
 
         current_mean = np.mean(sig_results)
         sigma_means[s] = current_mean
-        print(f"{s:7.1f} | {current_mean:15.2f} | {np.std(sig_results):15.2f} | {np.min(sig_results):15.2f} | {calls_sigma:10.0f}")
+        print(f"{s:7.1f} | {current_mean:20.2f} | {np.std(sig_results):20.2f} | {np.min(sig_results):20.2f} | {np.max(sig_results):20.2f} | {calls_sigma:12.0f}")
 
-    # Testing budget impact
-    print(f"--- Starting Budget Impact Analysis for {fun.__name__} with mu={best_mu}, sigma={SIGMA} and budget={BUDGET_5X} ---")
+    # Testing 5x budget impact
+    print(f"\n\nBudget Impact Analysis")
+    print(f"mu={best_mu}, sigma={SIGMA}, budget={BUDGET_5X}")
+    print(f"{'Mean':>20} | {'Std':>20} | {'Best':>20} | {'Worst':>20} | {'Calls':>12}")
+    print("-" * 104)
 
+    best_sigma = min(sigma_means, key=sigma_means.get)
+    final_results = []
+    calls_budget = 0
+    for _ in range(25):
+        results_budget, calls_budget = evolutionary_algorithm(fun, best_mu, best_sigma, BUDGET_5X)
+        final_results.append(results_budget)
+
+    print(f"{np.mean(final_results):20.2f} | {np.std(final_results):20.2f} | {np.min(final_results):20.2f} | {np.max(final_results):20.2f} | {calls_budget:12.0f}")
