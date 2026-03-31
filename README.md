@@ -23,11 +23,13 @@ Repository containing assignments and projects developed for the **Introduction 
 
 ### 🔍 Assignments Description
 
-`assignment_01/backpack-problem/`    — Knapsack problem (Exhaustive & Heuristic)
+`src/assignment_01/knapsack_problem/`    — Knapsack problem (Exhaustive & Heuristic).
 <br>
-`assignment_01/steepest-descent/`    — Local search with GUI & CEC2017 support
+`src/assignment_01/steepest_descent/`    — Local search with GUI, supporting Booth (2D) and CEC2017 (10D) functions.
 <br><br>
-`assignment_02/`           — (Upcoming) Next set of AI tasks
+`src/assignment_02/`                     — Evolutionary Algorithm (EA) for high-dimensional CEC2017 (10D) functions optimization.
+<br><br>
+`src/assignment_03/`                     — NOT STARTED
 
 ---
 
