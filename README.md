@@ -23,10 +23,13 @@ Repository containing assignments and projects developed for the **Introduction 
 
 ### 🔍 Assignments Description
 
-`assignment_01/backpack-problem/`    — Knapsack problem (Exhaustive & Heuristic)
-`assignment_01/steepest-descent/`    — Local search with GUI & CEC2017 support
+`src/assignment_01/knapsack_problem/`    — Knapsack problem (Exhaustive & Heuristic).
+<br>
+`src/assignment_01/steepest_descent/`    — Local search with GUI, supporting Booth (2D) and CEC2017 (10D) functions.
 <br><br>
-`assignment_02/`           — (Upcoming) Next set of AI tasks
+`src/assignment_02/`                     — Evolutionary Algorithm (EA) for high-dimensional CEC2017 (10D) functions optimization.
+<br><br>
+`src/assignment_03/`                     — NOT STARTED
 
 ---
 
@@ -60,6 +63,8 @@ git clone https://github.com/lukaa12/cec2017-py.git
 cp -R cec2017-py/cec2017 .
 ```
 Note: The library is excluded from version control via .gitignore to keep the repository lightweight.
+
+---
 
 ## 🚀 Running assignments
 ### 1. Using terminal

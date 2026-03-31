@@ -1,7 +1,7 @@
 import tkinter as tk
 import numpy as np
 
-from .a2_main import steepest_descent, visualize, booth
+from .a1b_main import steepest_descent, visualize, booth
 from src.cec2017.functions import f1, f2, f3
 
 # ===================== RUN ALGORITHM =====================
