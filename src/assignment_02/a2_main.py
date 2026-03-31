@@ -24,7 +24,7 @@ def evolutionary_algorithm(fun, mu, sigma, budget):
     for t in range(t_max):
         new_population = []
         for _ in range(mu):
-            idx1, idx2 = np.random.choice(mu, 2, replace=False)
+            idx1, idx2 = np.random.choice(mu, 2, replace=True)
 
             # Choose parent
             if fitness[idx1] < fitness[idx2]:
