@@ -118,8 +118,25 @@ def minimax_a_b(board, depth, plays_as_black, ev_func):
     a = -np.inf
     b = np.inf
     moves_marks = []
-    for possible_move in possible_moves:
+    best_value = -np.inf # To prevent error of if val > best_value
+
+    for i, possible_move in enumerate(possible_moves): # Slightly changed to get enumerated number
         # ToDo
+        # Copy not to affect real board
+        temp_board = deepcopy(board)
+        temp_board.make_move(possible_move)
+
+        # Recursion call
+        val = minimax_a_b_recurr(temp_board, depth - 1, False, a, b, ev_func)
+
+        # Check if better outcome
+        if val > best_value:
+            best_value = val
+            best_index = i
+
+        # Add value to the history and set alpha to better value
+        moves_marks.append(val)
+        a = max(a, val)
 
     return possible_moves[best_index]
 
