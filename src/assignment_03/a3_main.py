@@ -50,6 +50,35 @@ def basic_ev_func(board, is_black_turn):
     h = 0
     # ToDo funkcja liczy i zwraca ocene aktualnego stanu planszy
 
+    # Check the price for the win
+    if board.black_won:
+        return WON_PRIZE if is_black_turn else -WON_PRIZE
+    if board.white_won:
+        return -WON_PRIZE if is_black_turn else WON_PRIZE
+
+    # Sum of the pieces values
+    for row in range(BOARD_HEIGHT):
+        for col in range(BOARD_WIDTH):
+            # Setting piece as a loop variable
+            piece = board.board[row][col]
+
+            if piece.is_empty():
+                continue
+
+            value = 10 if piece.is_king() else 1 # Piece one, king 10
+
+            # Strength of a player calculation - plus current, minus opponent
+            if is_black_turn:
+                if piece.is_black():
+                    h += value
+                else:
+                    h -= value
+            else:
+                if piece.is_white():
+                    h += value
+                else:
+                    h -= value
+
     # board.board[row][col].is_black() - sprawdza czy to czarny kolor figury
     # board.board[row][col].is_white() - sprawdza czy to biaĹy kolor figury
     # board.board[row][col].is_king() - sprawdza czy to damka
@@ -90,7 +119,7 @@ def minimax_a_b(board, depth, plays_as_black, ev_func):
     b = np.inf
     moves_marks = []
     for possible_move in possible_moves:
-    # ToDo
+        # ToDo
 
     return possible_moves[best_index]
 
@@ -184,6 +213,8 @@ class King(Pawn):
 
 
 class Board:
+    last_black_mov_indx: int
+
     def __init__(self):  # row, col
         self.board = []
         self.white_turn = True
