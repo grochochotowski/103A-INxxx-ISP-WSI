@@ -48,7 +48,7 @@ KING_MARK_COL = (255, 215, 0)
 # count difference between the number of pieces, king+10
 def basic_ev_func(board, is_black_turn):
     h = 0
-    # ToDo funkcja liczy i zwraca ocene aktualnego stanu planszy
+    # ToDo - done funkcja liczy i zwraca ocene aktualnego stanu planszy
 
     # Check the price for the win
     if board.black_won:
@@ -103,7 +103,28 @@ def push_to_opp_half_ev_func(board, is_black_turn):
 # za kaĹźdy nasz pion otrzymuje siÄ nagrodÄ w wysokoĹci: (5 + numer wiersza, na ktĂłrym stoi pion) (im jest bliĹźej wroga tym lepiej), a za kaĹźdÄ damkÄ dodtakowe: 10.
 def push_forward_ev_func(board, is_black_turn):
     h = 0
-    # ToDo
+    # ToDo - done
+    # win conditions
+    if board.black_won: return WON_PRIZE if is_black_turn else -WON_PRIZE
+    if board.white_won: return -WON_PRIZE if is_black_turn else WON_PRIZE
+
+    # for each element of a board
+    for row in range(BOARD_HEIGHT):
+        for col in range(BOARD_WIDTH):
+
+            # check if there is a piece
+            piece = board.board[row][col]
+            if piece.is_empty(): continue # if no skip
+
+            if piece.is_black(): # if piece is black
+                val = (5 + row)
+                if piece.is_king(): val += 10
+                h += val if is_black_turn else -val
+            else: # if piece is white
+                val = (5 + (7 - row))
+                if piece.is_king(): val += 10
+                h += val if not is_black_turn else -val
+
     return h
 
 
@@ -122,7 +143,7 @@ def minimax_a_b(board, depth, plays_as_black, ev_func):
     best_indices = [] # For the same scores
 
     for i, possible_move in enumerate(possible_moves): # Slightly changed to get enumerated number
-        # ToDo
+        # ToDo - done
         # Copy not to affect real board
         temp_board = deepcopy(board)
         temp_board.make_move(possible_move)
@@ -147,7 +168,7 @@ def minimax_a_b(board, depth, plays_as_black, ev_func):
 
 # recursive function, called from minimax_a_b
 def minimax_a_b_recurr(board, depth, move_max, a, b, ev_func):
-    # ToDo
+    # ToDo - done
     # Check if game won or max depth is reached for recursion stop
     if board.black_won or board.white_won or depth == 0:
         return ev_func(board, move_max)
