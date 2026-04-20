@@ -119,6 +119,7 @@ def minimax_a_b(board, depth, plays_as_black, ev_func):
     b = np.inf
     moves_marks = []
     best_value = -np.inf # To prevent error of if val > best_value
+    best_indices = [] # For the same scores
 
     for i, possible_move in enumerate(possible_moves): # Slightly changed to get enumerated number
         # ToDo
@@ -132,18 +133,23 @@ def minimax_a_b(board, depth, plays_as_black, ev_func):
         # Check if better outcome
         if val > best_value:
             best_value = val
-            best_index = i
+            best_indices = [i]
+        elif val == best_value:
+            best_indices.append(i)
 
         # Add value to the history and set alpha to better value
         moves_marks.append(val)
         a = max(a, val)
 
+    best_index = np.random.choice(best_indices)
     return possible_moves[best_index]
 
 
 # recursive function, called from minimax_a_b
 def minimax_a_b_recurr(board, depth, move_max, a, b, ev_func):
     # ToDo
+
+
     return b
 
 
