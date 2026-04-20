@@ -148,9 +148,40 @@ def minimax_a_b(board, depth, plays_as_black, ev_func):
 # recursive function, called from minimax_a_b
 def minimax_a_b_recurr(board, depth, move_max, a, b, ev_func):
     # ToDo
+    # Check if game won or max depth is reached for recursion stop
+    if board.black_won or board.white_won or depth == 0:
+        return ev_func(board, move_max)
 
+    # Get possible moves
+    possible_moves = board.get_possible_moves(move_max)
+    if not possible_moves:
+        return ev_func(board, move_max)
 
-    return b
+    if move_max:  # MAX (oponent) player turn
+        v = -np.inf
+        for move in possible_moves:
+            # Simulate the move on a board copy
+            temp_board = deepcopy(board)
+            temp_board.make_move(move)
+
+            v = max(v, minimax_a_b_recurr(temp_board, depth - 1, False, a, b, ev_func))
+
+            a = max(a, v)
+            if a >= b:
+                break
+        return v
+    else:  # MIN (user/AI) player turn (tries to minimize payoff)
+        v = np.inf
+        for move in possible_moves:
+            temp_board = deepcopy(board)
+            temp_board.make_move(move)
+
+            v = min(v, minimax_a_b_recurr(temp_board, depth - 1, True, a, b, ev_func))
+
+            b = min(b, v)
+            if a >= b:
+                break
+        return v
 
 
 class Move:
