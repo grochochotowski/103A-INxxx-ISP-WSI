@@ -96,7 +96,33 @@ def group_prize_ev_func(board, is_black_turn):
 # za kaĹźdy pion na wĹasnej poĹowie planszy otrzymuje siÄ 5 nagrody, na poĹowie przeciwnika 7, a za kaĹźdÄ damkÄ 10.
 def push_to_opp_half_ev_func(board, is_black_turn):
     h = 0
-    # ToDo
+    # ToDo - doing
+    # win conditions
+    if board.black_won: return WON_PRIZE if is_black_turn else -WON_PRIZE
+    if board.white_won: return -WON_PRIZE if is_black_turn else WON_PRIZE
+
+    # for each element of a board
+    for row in range(BOARD_HEIGHT):
+        for col in range(BOARD_WIDTH):
+            # check if there is a piece
+            piece = board.board[row][col]
+            if piece.is_empty(): continue  # if no - skip
+
+            # calculating values
+            # King base value = 10
+            if piece.is_king():
+                val = 10
+            else:
+                if piece.is_black(): # black  - if on the black side = 5, if on the white side = 7
+                    val = 7 if row >= 4 else 5
+                else: # white - if on the white side = 7, if on the black side = 5
+                    val = 7 if row <= 3 else 5
+
+            # value sum depending on whose turn it is
+            if is_black_turn:
+                h += val if piece.is_black() else -val
+            else:
+                h += val if piece.is_white() else -val
     return h
 
 
@@ -114,7 +140,7 @@ def push_forward_ev_func(board, is_black_turn):
 
             # check if there is a piece
             piece = board.board[row][col]
-            if piece.is_empty(): continue # if no skip
+            if piece.is_empty(): continue # if no - skip
 
             if piece.is_black(): # if piece is black
                 val = (5 + row)
