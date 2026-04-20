@@ -90,13 +90,50 @@ def basic_ev_func(board, is_black_turn):
 def group_prize_ev_func(board, is_black_turn):
     h = 0
     # ToDo
+    # win conditions
+    if board.black_won: return WON_PRIZE if is_black_turn else -WON_PRIZE
+    if board.white_won: return -WON_PRIZE if is_black_turn else WON_PRIZE
+
+    # define neighbors
+    neighbors = [(-1, -1), (-1, 1), (1, -1), (1, 1)]
+
+    # for each element of a board
+    for row in range(BOARD_HEIGHT):
+        for col in range(BOARD_WIDTH):
+            # check if there is a piece
+            piece = board.board[row][col]
+            if piece.is_empty(): continue  # if no - skip
+
+            # calculating values
+            val = 10 if piece.is_king() else 1 # king = 10, other = 1
+
+            group_bonus = 0
+            for row_check, column_check in neighbors:
+                n_row, n_col = row + row_check, col + column_check
+
+                # check if neighbor is on the board
+                if 0 <= n_row < BOARD_HEIGHT and 0 <= n_col < BOARD_WIDTH:
+                    neighbor_piece = board.board[n_row][n_col]
+
+                    # check neighbor color (group bonus)
+                    if not neighbor_piece.is_empty():
+                        if piece.is_black() == neighbor_piece.is_black():
+                            group_bonus += 0.5
+
+            total_val = val + group_bonus
+
+            # value sum depending on whose turn it is
+            if is_black_turn:
+                h += total_val if piece.is_black() else -total_val
+            else:
+                h += total_val if piece.is_white() else -total_val
     return h
 
 
 # za kaĹźdy pion na wĹasnej poĹowie planszy otrzymuje siÄ 5 nagrody, na poĹowie przeciwnika 7, a za kaĹźdÄ damkÄ 10.
 def push_to_opp_half_ev_func(board, is_black_turn):
     h = 0
-    # ToDo - doing
+    # ToDo - done
     # win conditions
     if board.black_won: return WON_PRIZE if is_black_turn else -WON_PRIZE
     if board.white_won: return -WON_PRIZE if is_black_turn else WON_PRIZE
