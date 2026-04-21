@@ -50,11 +50,9 @@ def basic_ev_func(board, is_black_turn):
     h = 0
     # ToDo - done funkcja liczy i zwraca ocene aktualnego stanu planszy
 
-    # Check the price for the win
-    if board.black_won:
-        return WON_PRIZE if is_black_turn else -WON_PRIZE
-    if board.white_won:
-        return -WON_PRIZE if is_black_turn else WON_PRIZE
+    # win conditions
+    if board.black_won: return WON_PRIZE
+    if board.white_won: return -WON_PRIZE
 
     # Sum of the pieces values
     for row in range(BOARD_HEIGHT):
@@ -68,16 +66,10 @@ def basic_ev_func(board, is_black_turn):
             value = 10 if piece.is_king() else 1 # Piece one, king 10
 
             # Strength of a player calculation - plus current, minus opponent
-            if is_black_turn:
-                if piece.is_black():
-                    h += value
-                else:
-                    h -= value
+            if piece.is_black():
+                h += value
             else:
-                if piece.is_white():
-                    h += value
-                else:
-                    h -= value
+                h -= value
 
     # board.board[row][col].is_black() - sprawdza czy to czarny kolor figury
     # board.board[row][col].is_white() - sprawdza czy to biaĹy kolor figury
@@ -91,8 +83,8 @@ def group_prize_ev_func(board, is_black_turn):
     h = 0
     # ToDo
     # win conditions
-    if board.black_won: return WON_PRIZE if is_black_turn else -WON_PRIZE
-    if board.white_won: return -WON_PRIZE if is_black_turn else WON_PRIZE
+    if board.black_won: return WON_PRIZE
+    if board.white_won: return -WON_PRIZE
 
     # define neighbors
     neighbors = [(-1, -1), (-1, 1), (1, -1), (1, 1)]
@@ -123,10 +115,10 @@ def group_prize_ev_func(board, is_black_turn):
             total_val = val + group_bonus
 
             # value sum depending on whose turn it is
-            if is_black_turn:
-                h += total_val if piece.is_black() else -total_val
+            if piece.is_black():
+                h += total_val
             else:
-                h += total_val if piece.is_white() else -total_val
+                h -= total_val
     return h
 
 
@@ -135,8 +127,8 @@ def push_to_opp_half_ev_func(board, is_black_turn):
     h = 0
     # ToDo - done
     # win conditions
-    if board.black_won: return WON_PRIZE if is_black_turn else -WON_PRIZE
-    if board.white_won: return -WON_PRIZE if is_black_turn else WON_PRIZE
+    if board.black_won: return WON_PRIZE
+    if board.white_won: return -WON_PRIZE
 
     # for each element of a board
     for row in range(BOARD_HEIGHT):
@@ -156,10 +148,10 @@ def push_to_opp_half_ev_func(board, is_black_turn):
                     val = 7 if row <= 3 else 5
 
             # value sum depending on whose turn it is
-            if is_black_turn:
-                h += val if piece.is_black() else -val
+            if piece.is_black():
+                h += val
             else:
-                h += val if piece.is_white() else -val
+                h -= val
     return h
 
 
@@ -168,8 +160,8 @@ def push_forward_ev_func(board, is_black_turn):
     h = 0
     # ToDo - done
     # win conditions
-    if board.black_won: return WON_PRIZE if is_black_turn else -WON_PRIZE
-    if board.white_won: return -WON_PRIZE if is_black_turn else WON_PRIZE
+    if board.black_won: return WON_PRIZE
+    if board.white_won: return -WON_PRIZE
 
     # for each element of a board
     for row in range(BOARD_HEIGHT):
@@ -182,12 +174,11 @@ def push_forward_ev_func(board, is_black_turn):
             if piece.is_black(): # if piece is black
                 val = (5 + row)
                 if piece.is_king(): val += 10
-                h += val if is_black_turn else -val
+                h += val
             else: # if piece is white
                 val = (5 + (7 - row))
                 if piece.is_king(): val += 10
-                h += val if not is_black_turn else -val
-
+                h -= val
     return h
 
 
@@ -202,28 +193,42 @@ def minimax_a_b(board, depth, plays_as_black, ev_func):
     a = -np.inf
     b = np.inf
     moves_marks = []
-    best_value = -np.inf # To prevent error of if val > best_value
     best_indices = [] # For the same scores
 
-    for i, possible_move in enumerate(possible_moves): # Slightly changed to get enumerated number
+    if plays_as_black:
+        best_value = -np.inf  # MAX for black
+    else:
+        best_value = np.inf  # MIN fow white
+
+    for i, possible_move in enumerate(possible_moves):
         # ToDo - done
         # Copy not to affect real board
         temp_board = deepcopy(board)
         temp_board.make_move(possible_move)
 
         # Recursion call
-        val = minimax_a_b_recurr(temp_board, depth - 1, False, a, b, ev_func)
+        val = minimax_a_b_recurr(temp_board, depth - 1, not plays_as_black, a, b, ev_func)
 
-        # Check if better outcome
-        if val > best_value:
-            best_value = val
-            best_indices = [i]
-        elif val == best_value:
-            best_indices.append(i)
+        if plays_as_black:
+            # black
+            if val > best_value:
+                best_value = val
+                best_indices = [i]
+            elif val == best_value:
+                best_indices.append(i)
+            a = max(a, val)
+        else:
+            # white
+            if val < best_value:
+                best_value = val
+                best_indices = [i]
+            elif val == best_value:
+                best_indices.append(i)
+            b = min(b, val)
 
         # Add value to the history and set alpha to better value
         moves_marks.append(val)
-        a = max(a, val)
+        # a = max(a, val)
 
     best_index = np.random.choice(best_indices)
     return possible_moves[best_index]
@@ -239,7 +244,10 @@ def minimax_a_b_recurr(board, depth, move_max, a, b, ev_func):
     # Get possible moves
     possible_moves = board.get_possible_moves(move_max)
     if not possible_moves:
-        return ev_func(board, move_max)
+        if move_max: # white move - no moves > black loses
+            return -WON_PRIZE
+        else: # white move - no moves > white loses
+            return WON_PRIZE
 
     if move_max:  # MAX (oponent) player turn
         v = -np.inf
@@ -699,5 +707,6 @@ def ai_vs_ai():
     # if both won then it is a draw!
 
 
-main()
-# ai_vs_ai()
+
+#main()
+#ai_vs_ai()
