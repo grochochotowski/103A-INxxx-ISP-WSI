@@ -753,6 +753,51 @@ def ai_vs_ai_function_test(n_games, depth, base_func, test_funcs):
 
 
 # Testing how does the search depth affect result
+def ai_vs_ai_depth_test(n_games, base_func):
+    test_depths = [2, 3, 4, 5]
+
+    print(f"\n{'=' * 60}")
+    print(f"Depth test with fixed function = {base_func.__name__}:")
+    print(f"{'=' * 60}")
+
+    for t_depth in test_depths:
+        w_wins, b_wins, draws = 0, 0, 0
+        print(f"\nTesting: Black depth {t_depth} vs White depth 4")
+
+        for i in range(n_games):
+            board = Board()
+            is_running = True
+            while is_running:
+                # White uses fixed base depth
+                if board.white_turn:
+                    move = minimax_a_b(board, 4, False, base_func)
+                # Black uses different depths
+                else:
+                    move = minimax_a_b(board, t_depth, True, base_func)
+
+                if move:
+                    board.register_move(move)
+                    board.make_move(move)
+                else:
+                    if board.white_turn:
+                        board.black_won = True
+                    else:
+                        board.white_won = True
+                    is_running = False
+
+                if board.end(): is_running = False
+
+            if board.black_won and board.white_won:
+                draws += 1
+            elif board.black_won:
+                b_wins += 1
+            elif board.white_won:
+                w_wins += 1
+            print(f"  Game {i + 1} done...")
+
+        print(f"RESULT: Black (depth {t_depth}) wins: {b_wins}, White (depth 4): {w_wins}, Draws: {draws}")
+
+
 
 test_funcs_1 = [basic_ev_func, push_forward_ev_func, push_to_opp_half_ev_func, group_prize_ev_func]
 test_funcs_2 = [push_forward_ev_func, push_to_opp_half_ev_func, group_prize_ev_func]
@@ -762,7 +807,8 @@ test_funcs_4 = [group_prize_ev_func]
 #ai_vs_ai_function_test(n_games=25, depth=4, base_func=push_forward_ev_func, test_funcs=test_funcs_2)
 #ai_vs_ai_function_test(n_games=25, depth=4, base_func=push_to_opp_half_ev_func, test_funcs=test_funcs_3)
 #ai_vs_ai_function_test(n_games=25, depth=4, base_func=group_prize_ev_func, test_funcs=test_funcs_4)
-
+#ai_vs_ai_depth_test(n_games=25, base_func=basic_ev_func)
+ai_vs_ai_depth_test(n_games=25, base_func=push_to_opp_half_ev_func)
 
 #main()
 #ai_vs_ai()
