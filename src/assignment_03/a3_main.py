@@ -707,7 +707,7 @@ def ai_vs_ai():
     # if both won then it is a draw!
 
 # ======================= TEST FUNCTIONS =======================
-
+# ToDo
 # Testing how does the prize function affect result
 def ai_vs_ai_function_test(n_games, depth, base_func, test_funcs):
     print(f"\n{'=' * 60}")
@@ -751,7 +751,7 @@ def ai_vs_ai_function_test(n_games, depth, base_func, test_funcs):
 
         print(f"RESULT: Black ({test_func.__name__}) wins: {b_wins}, White ({base_func.__name__}): {w_wins}, Draws: {draws}")
 
-
+# ToDo
 # Testing how does the search depth affect result
 def ai_vs_ai_depth_test(n_games, base_func):
     test_depths = [2, 3, 4, 5]
@@ -798,7 +798,7 @@ def ai_vs_ai_depth_test(n_games, base_func):
         print(f"RESULT: Black (depth {t_depth}) wins: {b_wins}, White (depth 4): {w_wins}, Draws: {draws}")
 
 
-
+# ToDo
 test_funcs_1 = [basic_ev_func, push_forward_ev_func, push_to_opp_half_ev_func, group_prize_ev_func]
 test_funcs_2 = [push_forward_ev_func, push_to_opp_half_ev_func, group_prize_ev_func]
 test_funcs_3 = [push_to_opp_half_ev_func, group_prize_ev_func]
@@ -808,7 +808,7 @@ test_funcs_4 = [group_prize_ev_func]
 #ai_vs_ai_function_test(n_games=25, depth=4, base_func=push_to_opp_half_ev_func, test_funcs=test_funcs_3)
 #ai_vs_ai_function_test(n_games=25, depth=4, base_func=group_prize_ev_func, test_funcs=test_funcs_4)
 #ai_vs_ai_depth_test(n_games=25, base_func=basic_ev_func)
-ai_vs_ai_depth_test(n_games=25, base_func=push_to_opp_half_ev_func)
+#ai_vs_ai_depth_test(n_games=25, base_func=push_to_opp_half_ev_func)
 
-#main()
+main()
 #ai_vs_ai()
