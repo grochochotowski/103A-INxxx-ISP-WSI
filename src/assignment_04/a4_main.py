@@ -161,6 +161,24 @@ def build_tree(X, y, attributes):
 
     return node
 
+# =========================== PREDICTION ===========================
+def predict_one(node, sample):
+    """
+    Predicts class label for a single sample using the trained ID3 tree.
+    """
+
+    # If node is a leaf, return its class label
+    if node.label is not None:
+        return node.label
+
+    value = sample[node.attribute_index]
+
+    # If test sample has an unknown attribute value, use fallback class
+    if value not in node.children:
+        return node.majority_label
+
+    return predict_one(node.children[value], sample)
+
 # =========================== TESTS ===========================
 # Get breast cancer data
 X, y = load_data("breast-cancer/breast-cancer.data", class_index=0)
