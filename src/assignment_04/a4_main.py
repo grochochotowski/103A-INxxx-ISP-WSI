@@ -229,7 +229,6 @@ def accuracy(y_true, y_pred):
 
     return correct / len(y_true)
 
-# =========================== CONFUSION MATRIX ===========================
 def confusion_matrix(y_true, y_pred):
     """
     Confusion matrix as nested dict:
@@ -274,5 +273,6 @@ def run_experiment(dataset_name, file_path, class_index=0):
     print_confusion_matrix(cm)
 
 # =========================== RUNNING PROGRAM ===========================
+# random.seed(1234)
 run_experiment("Breast Cancer", "breast-cancer/breast-cancer.data", class_index=0)
 run_experiment("Mushroom", "mushroom/agaricus-lepiota.data", class_index=0)
