@@ -42,6 +42,37 @@ def entropy(y):
 
     return ent
 
+# Inf(d,U) = sum_j (|U_j| / |U|) * I(U_j)
+def split_entropy(X, y, attribute_index):
+    total = len(y)
+    subsets = {}
+
+    # attribute grouping
+    for sample, label in zip(X, y):
+        value = sample[attribute_index]
+
+        if value not in subsets:
+            subsets[value] = []
+
+        subsets[value].append(label)
+
+    # weighted entropy sum
+    result = 0.0
+
+    for subset in subsets.values():
+        weight = len(subset) / total
+        result += weight * entropy(subset)
+
+    return result
+
+# InfGain(d, U) = I(U) - Inf(d,U)
+def information_gain(X, y, attribute_index):
+    return entropy(y) - split_entropy(X, y, attribute_index)
+
+def majority_class(y):
+    counts = Counter(y)
+    return counts.most_common(1)[0][0]
+
 # Get breast + cancer data
 X, y = load_data("breast-cancer/breast-cancer.data", class_index=0)
 
@@ -54,5 +85,19 @@ print("First y:", y[0])
 print("\nEntropy tests:")
 
 print("All same:", entropy(["a", "a", "a"]))     # 0
-print("Half-half:", entropy(["a", "b"]))         # 1
+print("Half-half:", entropy(["a", "b"]))         # ln(2) ~= 0.693
 print("Real data:", entropy(y))                  # ~0. ...
+
+print("\nInformation Gain tests:")
+
+for attribute_index in range(len(X[0])):
+    gain = information_gain(X, y, attribute_index)
+    print(f"Attribute {attribute_index}: {gain}")
+
+best_attribute = max(
+    range(len(X[0])),
+    key=lambda attribute_index: information_gain(X, y, attribute_index)
+)
+
+print("Best attribute:", best_attribute)
+
