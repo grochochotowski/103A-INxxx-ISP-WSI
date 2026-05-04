@@ -1,5 +1,6 @@
 from pathlib import Path
 import math
+import random
 from collections import Counter
 
 
@@ -190,6 +191,31 @@ def predict(tree, X):
 
     return predictions
 
+# =========================== DATA SPLIT ===========================
+def train_test_split(X, y, test_ratio=0.4):
+    """
+    Splits data into train and test sets.
+
+    test_ratio = 0.4 -> 60% train, 40% test (3:2 as required)
+    """
+
+    data = list(zip(X, y))
+    random.shuffle(data)
+
+    split_index = int(len(data) * (1 - test_ratio))
+
+    train_data = data[:split_index]
+    test_data = data[split_index:]
+
+    X_train = [x for x, _ in train_data]
+    y_train = [y for _, y in train_data]
+
+    X_test = [x for x, _ in test_data]
+    y_test = [y for _, y in test_data]
+
+    return X_train, X_test, y_train, y_test
+
+
 # =========================== TESTS ===========================
 # Get breast cancer data
 X, y = load_data("breast-cancer/breast-cancer.data", class_index=0)
@@ -228,3 +254,11 @@ tree = build_tree(X, y, attributes)
 print("\nPrediction test:")
 print("True label:", y[0])
 print("Predicted:", predict_one(tree, X[0]))
+
+print("\nTrain/Test split:")
+
+X_train, X_test, y_train, y_test = train_test_split(X, y)
+
+print("Train size:", len(X_train))
+print("Test size:", len(X_test))
+
