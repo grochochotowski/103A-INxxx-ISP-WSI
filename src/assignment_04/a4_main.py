@@ -298,4 +298,6 @@ def run_experiment(dataset_name, file_path, class_index=0, runs=25):
 
 # =========================== RUNNING PROGRAM ===========================
 run_experiment("Breast Cancer", "breast-cancer/breast-cancer.data", class_index=0)
+run_experiment("Breast Cancer no ?", "breast-cancer/breast-cancer-no-?.data", class_index=0)
 run_experiment("Mushroom", "mushroom/agaricus-lepiota.data", class_index=0)
+run_experiment("Mushroom no ?", "mushroom/agaricus-lepiota-no-?.data", class_index=0)
