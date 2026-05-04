@@ -5,8 +5,11 @@ from collections import Counter
 # Settings
 BASE_DIR = Path(__file__).resolve().parent
 
-# Reusable data loading function
 def load_data(file_path, class_index=0):
+    """
+        Loads a nominal dataset from a .data file.
+        The class column is removed from X and stored in y.
+    """
     X = [] # data features
     y = [] # labels
 
@@ -29,9 +32,13 @@ def load_data(file_path, class_index=0):
 
     return X, y
 
-# I(U) = - sum_i (f_i * ln(f_i))
-# f_i = probability of class i
 def entropy(y):
+    """
+        Computes entropy I(U) for a set of class labels y.
+        f_i is a probability of class i
+        >> I(U) = - sum_i (f_i * ln(f_i))
+    """
+
     counts = Counter(y)
     total = len(y)
 
@@ -42,8 +49,12 @@ def entropy(y):
 
     return ent
 
-# Inf(d,U) = sum_j (|U_j| / |U|) * I(U_j)
 def split_entropy(X, y, attribute_index):
+    """
+        Computes Inf(d, U), the entropy after splitting U by attribute d.
+        >> Inf(d,U) = sum_j (|U_j| / |U|) * I(U_j)
+    """
+
     total = len(y)
     subsets = {}
 
@@ -65,15 +76,22 @@ def split_entropy(X, y, attribute_index):
 
     return result
 
-# InfGain(d, U) = I(U) - Inf(d,U)
 def information_gain(X, y, attribute_index):
+    """
+        Computes information gain for attribute d.
+        >> InfGain(d, U) = I(U) - Inf(d,U)
+    """
     return entropy(y) - split_entropy(X, y, attribute_index)
 
 def majority_class(y):
+    """
+        Returns the most frequent class in U.
+        Used when there are no attributes left or as a fallback during prediction.
+    """
     counts = Counter(y)
     return counts.most_common(1)[0][0]
 
-# Get breast + cancer data
+# Get breast cancer data
 X, y = load_data("breast-cancer/breast-cancer.data", class_index=0)
 
 # Example print
@@ -101,3 +119,5 @@ best_attribute = max(
 
 print("Best attribute:", best_attribute)
 
+print("\nMajority class test:")
+print("Majority:", majority_class(y))
