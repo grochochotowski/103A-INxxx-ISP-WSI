@@ -179,6 +179,17 @@ def predict_one(node, sample):
 
     return predict_one(node.children[value], sample)
 
+def predict(tree, X):
+    """
+    Predicts class labels for all samples in X.
+    """
+    predictions = []
+
+    for sample in X:
+        predictions.append(predict_one(tree, sample))
+
+    return predictions
+
 # =========================== TESTS ===========================
 # Get breast cancer data
 X, y = load_data("breast-cancer/breast-cancer.data", class_index=0)
