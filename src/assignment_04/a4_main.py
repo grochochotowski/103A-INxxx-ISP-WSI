@@ -256,63 +256,23 @@ def print_confusion_matrix(matrix):
             row.append(str(matrix.get(t, {}).get(p, 0)).rjust(20))
         print(f"{t:>20} " + " ".join(row))
 
-# =========================== TESTS ===========================
-# Get breast cancer data
-X, y = load_data("breast-cancer/breast-cancer.data", class_index=0)
+# =========================== RUNNING EXPERIMENT ===========================
+def run_experiment(dataset_name, file_path, class_index=0):
+    X, y = load_data(file_path, class_index) # Load data
 
-# Example print
-print(len(X), len(y))
-print("First X:", X[0])
-print("First y:", y[0])
+    X_train, X_test, y_train, y_test = train_test_split(X, y) # Split data
 
-# Tests
-print("\nEntropy tests:")
+    attributes = list(range(len(X[0])))
+    tree = build_tree(X_train, y_train, attributes)
 
-print("All same:", entropy(["a", "a", "a"]))     # 0
-print("Half-half:", entropy(["a", "b"]))         # ln(2) ~= 0.693
-print("Real data:", entropy(y))                  # ~0. ...
+    y_pred = predict(tree, X_test)
 
-print("\nInformation Gain tests:")
+    print(f"\n===== {dataset_name} =====") # Print
+    print("Accuracy:", accuracy(y_test, y_pred))
 
-for attribute_index in range(len(X[0])):
-    gain = information_gain(X, y, attribute_index)
-    print(f"Attribute {attribute_index}: {gain}")
+    cm = confusion_matrix(y_test, y_pred)
+    print_confusion_matrix(cm)
 
-best_attribute = max(
-    range(len(X[0])),
-    key=lambda attribute_index: information_gain(X, y, attribute_index)
-)
-
-print("Best attribute:", best_attribute)
-
-print("\nMajority class test:")
-print("Majority:", majority_class(y))
-
-attributes = list(range(len(X[0])))
-tree = build_tree(X, y, attributes)
-
-print("\nPrediction test:")
-print("True label:", y[0])
-print("Predicted:", predict_one(tree, X[0]))
-
-print("\nTrain/Test split:")
-
-X_train, X_test, y_train, y_test = train_test_split(X, y)
-
-print("Train size:", len(X_train))
-print("Test size:", len(X_test))
-
-attributes = list(range(len(X[0])))
-tree = build_tree(X_train, y_train, attributes)
-
-y_pred = predict(tree, X_test)
-
-print("\nPrediction on test set:")
-print("First true label:", y_test[0])
-print("First predicted:", y_pred[0])
-
-print("\nEvaluation:")
-print("Accuracy:", accuracy(y_test, y_pred))
-
-cm = confusion_matrix(y_test, y_pred)
-print_confusion_matrix(cm)
+# =========================== RUNNING PROGRAM ===========================
+run_experiment("Breast Cancer", "breast-cancer/breast-cancer.data", class_index=0)
+run_experiment("Mushroom", "mushroom/agaricus-lepiota.data", class_index=0)
