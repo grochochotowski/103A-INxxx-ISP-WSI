@@ -215,6 +215,19 @@ def train_test_split(X, y, test_ratio=0.4):
 
     return X_train, X_test, y_train, y_test
 
+# =========================== EVALUATION ===========================
+def accuracy(y_true, y_pred):
+    """
+    Computes classification accuracy = number of correct predictions / total number of predictions
+    """
+
+    correct = 0
+
+    for true_label, predicted_label in zip(y_true, y_pred):
+        if true_label == predicted_label:
+            correct += 1
+
+    return correct / len(y_true)
 
 # =========================== TESTS ===========================
 # Get breast cancer data
@@ -262,3 +275,14 @@ X_train, X_test, y_train, y_test = train_test_split(X, y)
 print("Train size:", len(X_train))
 print("Test size:", len(X_test))
 
+attributes = list(range(len(X[0])))
+tree = build_tree(X_train, y_train, attributes)
+
+y_pred = predict(tree, X_test)
+
+print("\nPrediction on test set:")
+print("First true label:", y_test[0])
+print("First predicted:", y_pred[0])
+
+print("\nEvaluation:")
+print("Accuracy:", accuracy(y_test, y_pred))
