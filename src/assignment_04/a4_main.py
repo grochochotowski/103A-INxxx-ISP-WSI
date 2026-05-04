@@ -2,9 +2,8 @@ from pathlib import Path
 import math
 from collections import Counter
 
-# Settings
+# =========================== SETUP ===========================
 BASE_DIR = Path(__file__).resolve().parent
-
 def load_data(file_path, class_index=0):
     """
         Loads a nominal dataset from a .data file.
@@ -32,6 +31,7 @@ def load_data(file_path, class_index=0):
 
     return X, y
 
+# =========================== ID3 HELPERS ===========================
 def entropy(y):
     """
         Computes entropy I(U) for a set of class labels y.
@@ -91,6 +91,22 @@ def majority_class(y):
     counts = Counter(y)
     return counts.most_common(1)[0][0]
 
+# =========================== TREE ===========================
+class DecisionTreeNode:
+    """
+    Represents a single node in the ID3 decision tree.
+
+    If label is not None, the node is a leaf.
+    Otherwise, the node tests attribute_index and follows children[value].
+    majority_label is used as a fallback during prediction.
+    """
+    def __init__(self, attribute_index=None, label=None, majority_label=None):
+        self.attribute_index = attribute_index # attribute used for splitting
+        self.label = label # class label if leaf
+        self.majority_label = majority_label # most common class
+        self.children = {}
+
+# =========================== TESTS ===========================
 # Get breast cancer data
 X, y = load_data("breast-cancer/breast-cancer.data", class_index=0)
 
