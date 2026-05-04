@@ -229,6 +229,23 @@ def accuracy(y_true, y_pred):
 
     return correct / len(y_true)
 
+# =========================== CONFUSION MATRIX ===========================
+def confusion_matrix(y_true, y_pred):
+    """
+    Confusion matrix as nested dict:
+    matrix[true_label][pred_label] = count
+    """
+    matrix = {}
+
+    for true, pred in zip(y_true, y_pred):
+        if true not in matrix:
+            matrix[true] = {}
+        if pred not in matrix[true]:
+            matrix[true][pred] = 0
+        matrix[true][pred] += 1
+
+    return matrix
+
 # =========================== TESTS ===========================
 # Get breast cancer data
 X, y = load_data("breast-cancer/breast-cancer.data", class_index=0)
