@@ -2,6 +2,7 @@ from pathlib import Path
 import math
 from collections import Counter
 
+
 # =========================== SETUP ===========================
 BASE_DIR = Path(__file__).resolve().parent
 def load_data(file_path, class_index=0):
@@ -105,6 +106,60 @@ class DecisionTreeNode:
         self.label = label # class label if leaf
         self.majority_label = majority_label # most common class
         self.children = {}
+
+def build_tree(X, y, attributes):
+    """
+    Builds an ID3 decision tree recursively.
+
+    1. If all examples have the same class -> return leaf.
+    2. If there are no attributes left -> return leaf with majority class.
+    3. Otherwise choose attribute with maximum information gain.
+    """
+
+    # Case 1: all labels are the same
+    if len(set(y)) == 1:
+        return DecisionTreeNode(label=y[0], majority_label=y[0])
+
+    # Case 2: no attributes left
+    if not attributes:
+        majority = majority_class(y)
+        return DecisionTreeNode(label=majority, majority_label=majority)
+
+    # Choose best attribute
+    best_attribute = max(
+        attributes,
+        key=lambda attribute_index: information_gain(X, y, attribute_index)
+    )
+
+    node = DecisionTreeNode(
+        attribute_index=best_attribute,
+        majority_label=majority_class(y)
+    )
+
+    # Create branches for each value of the best attribute
+    values = set(sample[best_attribute] for sample in X)
+
+    for value in values:
+        X_subset = []
+        y_subset = []
+
+        for sample, label in zip(X, y):
+            if sample[best_attribute] == value:
+                X_subset.append(sample)
+                y_subset.append(label)
+
+        remaining_attributes = [
+            attribute for attribute in attributes
+            if attribute != best_attribute
+        ]
+
+        node.children[value] = build_tree(
+            X_subset,
+            y_subset,
+            remaining_attributes
+        )
+
+    return node
 
 # =========================== TESTS ===========================
 # Get breast cancer data
