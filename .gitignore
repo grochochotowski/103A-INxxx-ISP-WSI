@@ -233,3 +233,7 @@ Index
 # Large raw data
 # *.csv
 # *.parquet
+
+# assignemt 4 dataset junk
+src/assignment_04/**/Index
+src/assignment_04/**/README
