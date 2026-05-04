@@ -246,6 +246,16 @@ def confusion_matrix(y_true, y_pred):
 
     return matrix
 
+def print_confusion_matrix(matrix):
+    labels = sorted(set(matrix.keys()) | {p for row in matrix.values() for p in row})
+    print("\nConfusion Matrix (rows=true, cols=pred):")
+    print(" " * 20 + " ".join(f"{l:>20}" for l in labels))
+    for t in labels:
+        row = []
+        for p in labels:
+            row.append(str(matrix.get(t, {}).get(p, 0)).rjust(20))
+        print(f"{t:>20} " + " ".join(row))
+
 # =========================== TESTS ===========================
 # Get breast cancer data
 X, y = load_data("breast-cancer/breast-cancer.data", class_index=0)
@@ -303,3 +313,6 @@ print("First predicted:", y_pred[0])
 
 print("\nEvaluation:")
 print("Accuracy:", accuracy(y_test, y_pred))
+
+cm = confusion_matrix(y_test, y_pred)
+print_confusion_matrix(cm)
