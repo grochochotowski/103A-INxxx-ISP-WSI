@@ -1,6 +1,7 @@
 from pathlib import Path
 import math
 import random
+import statistics
 from collections import Counter
 
 
@@ -256,23 +257,45 @@ def print_confusion_matrix(matrix):
         print(f"{t:>20} " + " ".join(row))
 
 # =========================== RUNNING EXPERIMENT ===========================
-def run_experiment(dataset_name, file_path, class_index=0):
-    X, y = load_data(file_path, class_index) # Load data
-
-    X_train, X_test, y_train, y_test = train_test_split(X, y) # Split data
-
+def run_experiment(dataset_name, file_path, class_index=0, runs=25):
+    X, y = load_data(file_path, class_index)
     attributes = list(range(len(X[0])))
-    tree = build_tree(X_train, y_train, attributes)
 
-    y_pred = predict(tree, X_test)
+    accuracies = []
+    total_cm = {}
 
-    print(f"\n===== {dataset_name} =====") # Print
-    print("Accuracy:", accuracy(y_test, y_pred))
+    for seed in range(runs):
+        random.seed(seed)
 
-    cm = confusion_matrix(y_test, y_pred)
-    print_confusion_matrix(cm)
+        X_train, X_test, y_train, y_test = train_test_split(X, y)
+
+        tree = build_tree(X_train, y_train, attributes)
+        y_pred = predict(tree, X_test)
+
+        acc = accuracy(y_test, y_pred)
+        accuracies.append(acc)
+
+        cm = confusion_matrix(y_test, y_pred)
+
+        for true_label, row in cm.items():
+            if true_label not in total_cm:
+                total_cm[true_label] = {}
+
+            for pred_label, count in row.items():
+                if pred_label not in total_cm[true_label]:
+                    total_cm[true_label][pred_label] = 0
+
+                total_cm[true_label][pred_label] += count
+
+    print(f"\n===== {dataset_name} =====")
+    print("Runs:", runs)
+    print("Mean accuracy:", statistics.mean(accuracies))
+    print("Std accuracy:", statistics.stdev(accuracies))
+    print("Min accuracy:", min(accuracies))
+    print("Max accuracy:", max(accuracies))
+
+    print_confusion_matrix(total_cm)
 
 # =========================== RUNNING PROGRAM ===========================
-# random.seed(1234)
 run_experiment("Breast Cancer", "breast-cancer/breast-cancer.data", class_index=0)
 run_experiment("Mushroom", "mushroom/agaricus-lepiota.data", class_index=0)
