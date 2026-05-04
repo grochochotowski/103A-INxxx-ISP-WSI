@@ -221,3 +221,10 @@ print("Best attribute:", best_attribute)
 
 print("\nMajority class test:")
 print("Majority:", majority_class(y))
+
+attributes = list(range(len(X[0])))
+tree = build_tree(X, y, attributes)
+
+print("\nPrediction test:")
+print("True label:", y[0])
+print("Predicted:", predict_one(tree, X[0]))
