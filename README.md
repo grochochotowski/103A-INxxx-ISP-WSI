@@ -12,8 +12,10 @@ Repository containing assignments and projects developed for the **Introduction 
 │   ├── assignment_01/
 │   │   ├── backpack-problem/
 │   │   └── steepest-descent/
-│   │
-│   └── assignment_02/
+│   ├── assignment_02/
+│   ├── assignment_03/
+│   ├── assignment_04/
+│   └── assignment_05/ (current one)
 │
 ├── venv/            # Local virtual environment (ignored)
 ├── .gitignore
@@ -21,16 +23,19 @@ Repository containing assignments and projects developed for the **Introduction 
 └── README.md
 ```
 
-### 🔍 Assignments Description
+### 🔍 Assignments Overview
 
-`src/assignment_01/knapsack_problem/`    — Knapsack problem (Exhaustive & Heuristic).
+`src/assignment_01/knapsack_problem/`    — Knapsack problem solved using exhaustive search and greedy heuristic, including performance comparison.
 <br>
-`src/assignment_01/steepest_descent/`    — Local search with GUI, supporting Booth (2D) and CEC2017 (10D) functions.
+`src/assignment_01/steepest_descent/`    — Steepest descent optimization with numerical gradient, visualized on Booth and CEC2017 functions.
 <br><br>
-`src/assignment_02/`                     — Evolutionary Algorithm (EA) for high-dimensional CEC2017 (10D) functions optimization.
+`src/assignment_02/`                     — Classical evolutionary algorithm with tournament selection and generational replacement (no crossover), applied to CEC2017 benchmark functions (10D), including analysis of population size, mutation strength, and evaluation budget.
 <br><br>
-`src/assignment_03/`                     — NOT STARTED
-
+`src/assignment_03/`                     — Minimax algorithm with alpha-beta pruning applied to a simplified checkers game, including evaluation function design and analysis of search depth impact.
+<br><br>
+`src/assignment_04/`                     — ID3 decision tree classifier for nominal data. Includes entropy-based attribute selection, recursive tree construction, multiple randomized runs, and evaluation using accuracy and confusion matrix on Breast Cancer and Mushroom datasets.
+<br><br>
+`src/assignment_04/`                     — SOON
 ---
 
 ## 🛠 Setup & Installation

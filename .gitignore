@@ -210,3 +210,30 @@ __marimo__/
 
 # CEC2017
 src/cec2017/
+
+# Archives
+*.zip
+*.tar
+*.gz
+*.bz2
+*.7z
+*.rar
+
+# Compressed / binary dataset leftovers
+*.Z
+
+# Generic dataset junk files
+Index
+*.idx
+
+# Binary / serialized data
+*.pkl
+*.joblib
+
+# Large raw data
+# *.csv
+# *.parquet
+
+# assignemt 4 dataset junk
+src/assignment_04/**/Index
+src/assignment_04/**/README
