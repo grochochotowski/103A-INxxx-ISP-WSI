@@ -1,8 +1,30 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Mon Nov  8 16:51:50 2021
+
+@author: Rafał Biedrzycki
+
+Kodu tego mogą używać moi studenci na ćwiczeniach z przedmiotu
+Wstęp do Sztucznej Inteligencji.
+
+Kod ten powstał, aby przyspieszyć i ułatwić pracę studentów,
+tak aby mogli skupić się na algorytmach sztucznej inteligencji.
+
+Kod nie jest wzorem dobrej jakości programowania w Pythonie,
+nie jest również wzorem programowania obiektowego
+i może zawierać błędy.
+
+Nie ma obowiązku używania tego kodu.
+"""
+
 import numpy as np
 import matplotlib.pyplot as plt
 
-# Tu najmłodsze cyfry numerów indeksów, u mnie 336284 czyli ja mam dwojke wpisz swoj
-p = [3, 2]
+# ToDo tu prosze podac najmłodsze cyfry numerow indeksow
+# 336284 -> 4
+# 348521 -> 1
+p = [4, 1]
 
 L_BOUND = -5
 U_BOUND = 5
@@ -15,16 +37,20 @@ y = q(x)
 
 np.random.seed(1)
 
+# f logistyczna jako przykład sigmoidalnej
 def sigmoid(x):
     return 1 / (1 + np.exp(-x))
 
+# pochodna fun. 'sigmoid'
 def d_sigmoid(x):
     s = sigmoid(x)
     return s * (1 - s)
 
+# f. straty
 def nloss(y_out, y):
     return (y_out - y) ** 2
 
+# pochodna f. straty
 def d_nloss(y_out, y):
     return 2 * (y_out - y)
 
@@ -37,6 +63,8 @@ class DlNet:
         self.HIDDEN_L_SIZE = hidden_l_size
         self.LR = lr
 
+        # ToDo inicjalizacja wag i biasów
+
         # Wagi i biasy między wejściem a warstwą ukrytą
         self.w1 = np.random.uniform(-1, 1, self.HIDDEN_L_SIZE)
         self.b1 = np.random.uniform(-1, 1, self.HIDDEN_L_SIZE)
@@ -46,6 +74,8 @@ class DlNet:
         self.b2 = np.random.uniform(-1, 1)
 
     def forward(self, x):
+        # ToDo propagacja w przód
+
         # Warstwa ukryta
         self.z1 = self.w1 * x + self.b1
         self.h1 = sigmoid(self.z1)
@@ -56,6 +86,7 @@ class DlNet:
         return self.y_out
 
     def predict(self, x):
+        # ToDo predykcja dla zbioru punktów
         result = []
 
         for xi in x:
@@ -64,6 +95,8 @@ class DlNet:
         return np.array(result)
 
     def backward(self, x, y):
+        # ToDo propagacja wsteczna
+
         # Najpierw przejście w przód
         y_out = self.forward(x)
 
@@ -89,10 +122,14 @@ class DlNet:
         self.b1 -= self.LR * dL_db1
 
     def train(self, x_set, y_set, iters):
+        # ToDo uczenie sieci
+
         for i in range(0, iters):
             for j in range(len(x_set)):
                 self.backward(x_set[j], y_set[j])
 
+
+            # Kontrolne wypisanie błędu co 1000 iteracji
             if i % 1000 == 0:
                 yh_tmp = self.predict(x_set)
                 mse = np.mean(nloss(yh_tmp, y_set))
@@ -104,8 +141,12 @@ class DlNet:
 nn = DlNet(x, y, hidden_l_size=9, lr=0.003)
 nn.train(x, y, 15000)
 
+
+# ToDo tu umieścić wyniki (y) z sieci
 yh = nn.predict(x)
 
+
+# Wskaźniki jakości aproksymacji
 mse = np.mean((yh - y) ** 2)
 rmse = np.sqrt(mse)
 mae = np.mean(np.abs(yh - y))
