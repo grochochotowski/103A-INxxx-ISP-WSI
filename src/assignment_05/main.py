@@ -173,3 +173,24 @@ plt.plot(x, yh, 'b', label='Aproksymacja sieci')
 plt.legend()
 plt.grid(True)
 plt.show()
+
+neuron_counts = [1, 2, 3, 5, 9, 15]
+
+print("\nWpływ liczby neuronów:\n")
+
+for neurons in neuron_counts:
+    nn = DlNet(x, y, hidden_l_size=neurons, lr=0.003)
+    nn.train(x, y, 15000)
+
+    yh = nn.predict(x)
+
+    mse = np.mean((yh - y) ** 2)
+    rmse = np.sqrt(mse)
+    mae = np.mean(np.abs(yh - y))
+
+    print(
+        f"Neurony: {neurons:2d} | "
+        f"MSE={mse:.4f} | "
+        f"RMSE={rmse:.4f} | "
+        f"MAE={mae:.4f}"
+    )
