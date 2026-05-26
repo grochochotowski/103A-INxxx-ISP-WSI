@@ -26,17 +26,18 @@ Repository containing assignments and projects developed for the **Introduction 
 
 ### 🔍 Assignments Overview
 
-- `src/assignment_01/knapsack_problem/`    — Knapsack problem solved using exhaustive search and greedy heuristic, including performance comparison.
+
+`src/assignment_01/knapsack_problem/`    — Knapsack problem solved using exhaustive search and greedy heuristic, including performance comparison.
 <br>
-- `src/assignment_01/steepest_descent/`    — Steepest descent optimization with numerical gradient, visualized on Booth and CEC2017 functions.
+`src/assignment_01/steepest_descent/`    — Steepest descent optimization with numerical gradient, visualized on Booth and CEC2017 functions.
 <br><br>
-- `src/assignment_02/`                     — Classical evolutionary algorithm with tournament selection and generational replacement (no crossover), applied to CEC2017 benchmark functions (10D), including analysis of population size, mutation strength, and evaluation budget.
+`src/assignment_02/`                     — Classical evolutionary algorithm with tournament selection and generational replacement (no crossover), applied to CEC2017 benchmark functions (10D), including analysis of population size, mutation strength, and evaluation budget.
 <br><br>
-- `src/assignment_03/`                     — Minimax algorithm with alpha-beta pruning applied to a simplified checkers game, including evaluation function design and analysis of search depth impact.
+`src/assignment_03/`                     — Minimax algorithm with alpha-beta pruning applied to a simplified checkers game, including evaluation function design and analysis of search depth impact.
 <br><br>
-- `src/assignment_04/`                     — ID3 decision tree classifier for nominal data. Includes entropy-based attribute selection, recursive tree construction, multiple randomized runs, and evaluation using accuracy and confusion matrix on Breast Cancer and Mushroom datasets.
+`src/assignment_04/`                     — ID3 decision tree classifier for nominal data. Includes entropy-based attribute selection, recursive tree construction, multiple randomized runs, and evaluation using accuracy and confusion matrix on Breast Cancer and Mushroom datasets.
 <br><br>
-- `src/assignment_05/`                     — Two-layer perceptron for nonlinear function approximation using backpropagation, including analysis of hidden layer size influence on approximation quality and evaluation using MSE, RMSE, and MAE metrics.
+`src/assignment_05/`                     — Two-layer perceptron for nonlinear function approximation using backpropagation, including analysis of hidden layer size influence on approximation quality and evaluation using MSE, RMSE, and MAE metrics.
 ---
 
 ## 🛠 Setup & Installation
