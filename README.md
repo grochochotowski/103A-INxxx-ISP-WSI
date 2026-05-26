@@ -15,7 +15,8 @@ Repository containing assignments and projects developed for the **Introduction 
 │   ├── assignment_02/
 │   ├── assignment_03/
 │   ├── assignment_04/
-│   └── assignment_05/ (current one)
+│   ├── assignment_05/
+│   └── assignment_06/ (current one)
 │
 ├── venv/            # Local virtual environment (ignored)
 ├── .gitignore
@@ -35,7 +36,7 @@ Repository containing assignments and projects developed for the **Introduction 
 <br><br>
 `src/assignment_04/`                     — ID3 decision tree classifier for nominal data. Includes entropy-based attribute selection, recursive tree construction, multiple randomized runs, and evaluation using accuracy and confusion matrix on Breast Cancer and Mushroom datasets.
 <br><br>
-`src/assignment_04/`                     — SOON
+`src/assignment_05/`                     — Two-layer perceptron for nonlinear function approximation using backpropagation, including analysis of hidden layer size influence on approximation quality and evaluation using MSE, RMSE, and MAE metrics.
 ---
 
 ## 🛠 Setup & Installation
