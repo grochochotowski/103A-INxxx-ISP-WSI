@@ -25,7 +25,8 @@ Repository containing assignments and projects developed for the **Introduction 
 ```
 
 ### 🔍 Assignments Overview
-<br>
+
+Below there is a short description of assignemnts
 
 `src/assignment_01/knapsack_problem/`    — Knapsack problem solved using exhaustive search and greedy heuristic, including performance comparison.
 <br>
