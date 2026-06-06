@@ -9,7 +9,7 @@ action_size = env.action_space.n
 
 alpha = 0.9
 gamma = 0.95
-epsilon = 0.1
+epsilon = 0.3
 max_steps = 200
 
 num_of_ind_runs = 25
@@ -28,7 +28,8 @@ for run in range(num_of_ind_runs):
             if np.random.random() < epsilon:
                 action = env.action_space.sample()
             else:
-                action = np.argmax(qtable[state])
+                best_actions = np.flatnonzero(qtable[state] == np.max(qtable[state]))
+                action = np.random.choice(best_actions)
 
             next_state, step_reward, terminated, truncated, info = env.step(action)
             done = terminated or truncated
@@ -63,7 +64,8 @@ for run in range(num_of_ind_runs):
             if np.random.random() < epsilon:
                 action = env.action_space.sample()
             else:
-                action = np.argmax(qtable[state])
+                best_actions = np.flatnonzero(qtable[state] == np.max(qtable[state]))
+                action = np.random.choice(best_actions)
 
             next_state, step_reward, terminated, truncated, info = env.step(action)
             done = terminated or truncated
