@@ -16,7 +16,8 @@ Repository containing assignments and projects developed for the **Introduction 
 │   ├── assignment_03/
 │   ├── assignment_04/
 │   ├── assignment_05/
-│   └── assignment_06/ (current one)
+│   ├── assignment_06/
+│   └── assignment_07/ # current one
 │
 ├── venv/            # Local virtual environment (ignored)
 ├── .gitignore
@@ -32,6 +33,8 @@ Repository containing assignments and projects developed for the **Introduction 
 - `src/assignment_03/` — Minimax algorithm with alpha-beta pruning applied to a simplified checkers game, including evaluation function design and analysis of search depth impact.
 - `src/assignment_04/` — ID3 decision tree classifier for nominal data. Includes entropy-based attribute selection, recursive tree construction, multiple randomized runs, and evaluation using accuracy and confusion matrix on Breast Cancer and Mushroom datasets.
 - `src/assignment_05/` — Two-layer perceptron for nonlinear function approximation using backpropagation, including analysis of hidden layer size influence on approximation quality and evaluation using MSE, RMSE, and MAE metrics.
+- `src/assignment_06/` — Q-Learning algorithm applied to the FrozenLake8x8 environment. Includes comparison of different reward systems, analysis of learning performance with and without environment stochasticity (slippery mode), and evaluation based on averaged rewards over multiple independent runs.
+- `src/assignment_07/` — in progress
 ---
 
 ## 🛠 Setup & Installation
