@@ -16,86 +16,77 @@ num_of_ind_runs = 25
 num_episodes = 1000
 averaged_reward = np.zeros(num_episodes)
 
+# ================== ACTION CHOICE ==================
+def choose_action(qtable, state):
+    if np.random.random() < epsilon:
+        return env.action_space.sample()
+
+    best_actions = np.flatnonzero(qtable[state] == np.max(qtable[state]))
+    return np.random.choice(best_actions)
+
+
 # ================== Q-LEARNING ==================
-for run in range(num_of_ind_runs):
-    qtable = np.zeros((state_size, action_size))
+def run_q_learning():
+    averaged_reward = np.zeros(num_episodes)
 
-    for episode in range(num_episodes):
-        state, info = env.reset()
-        reward = 0
+    for run in range(num_of_ind_runs):
+        qtable = np.zeros((state_size, action_size))
 
-        for step in range(max_steps):
-            if np.random.random() < epsilon:
-                action = env.action_space.sample()
-            else:
-                best_actions = np.flatnonzero(qtable[state] == np.max(qtable[state]))
-                action = np.random.choice(best_actions)
+        for episode in range(num_episodes):
+            state, info = env.reset()
+            reward = 0
 
-            next_state, step_reward, terminated, truncated, info = env.step(action)
-            done = terminated or truncated
+            for step in range(max_steps):
+                action = choose_action(qtable, state)
 
-            qtable[state, action] = qtable[state, action] + alpha * (
-                step_reward + gamma * np.max(qtable[next_state]) - qtable[state, action]
-            )
+                next_state, step_reward, terminated, truncated, info = env.step(action)
+                done = terminated or truncated
 
-            state = next_state
-            reward = reward + step_reward
+                if done:
+                    target = step_reward
+                else:
+                    target = step_reward + gamma * np.max(qtable[next_state])
 
-            if done:
-                break
+                qtable[state, action] = qtable[state, action] + alpha * (
+                        target - qtable[state, action]
+                )
 
-        averaged_reward[episode] = averaged_reward[episode] + reward
+                state = next_state
+                reward = reward + step_reward
 
-averaged_reward = averaged_reward / (num_of_ind_runs)
-averaged_reward_base = averaged_reward
+                if done:
+                    break
 
+            averaged_reward[episode] = averaged_reward[episode] + reward
 
-# ================== SECOND RUN FOR COMPARISON ==================
-averaged_reward = np.zeros(num_episodes)
-
-for run in range(num_of_ind_runs):
-    qtable = np.zeros((state_size, action_size))
-
-    for episode in range(num_episodes):
-        state, info = env.reset()
-        reward = 0
-
-        for step in range(max_steps):
-            if np.random.random() < epsilon:
-                action = env.action_space.sample()
-            else:
-                best_actions = np.flatnonzero(qtable[state] == np.max(qtable[state]))
-                action = np.random.choice(best_actions)
-
-            next_state, step_reward, terminated, truncated, info = env.step(action)
-            done = terminated or truncated
-
-            qtable[state, action] = qtable[state, action] + alpha * (
-                step_reward + gamma * np.max(qtable[next_state]) - qtable[state, action]
-            )
-
-            state = next_state
-            reward = reward + step_reward
-
-            if done:
-                break
-
-        averaged_reward[episode] = averaged_reward[episode] + reward
-
-averaged_reward = averaged_reward / (num_of_ind_runs)
+    averaged_reward = averaged_reward / (num_of_ind_runs)
+    return averaged_reward
 
 
 # ================== PLOTS ==================
-fig = plt.figure()
-ax = fig.add_subplot(1, 1, 1)
-ax.spines['left'].set_position('center')
-ax.spines['bottom'].set_position('zero')
-ax.spines['right'].set_color('none')
-ax.spines['top'].set_color('none')
-ax.xaxis.set_ticks_position('bottom')
-ax.yaxis.set_ticks_position('left')
-plt.plot(averaged_reward_base, 'r')
-plt.plot(averaged_reward, 'b')
-plt.show()
+def draw_plot(averaged_reward_base, averaged_reward):
+    fig = plt.figure()
+    ax = fig.add_subplot(1, 1, 1)
+    ax.spines['left'].set_position('center')
+    ax.spines['bottom'].set_position('zero')
+    ax.spines['right'].set_color('none')
+    ax.spines['top'].set_color('none')
+    ax.xaxis.set_ticks_position('bottom')
+    ax.yaxis.set_ticks_position('left')
+    plt.plot(averaged_reward_base, 'r')
+    plt.plot(averaged_reward, 'b')
+    plt.show()
+
+
+# ================== Q-LEARNING ==================
+averaged_reward = run_q_learning()
+averaged_reward_base = averaged_reward
+
+# ================== SECOND RUN ==================
+averaged_reward = run_q_learning()
+
+# ================== PLOTS ==================
+draw_plot(averaged_reward_base, averaged_reward)
+
 
 env.close()
