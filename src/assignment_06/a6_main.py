@@ -1,6 +1,7 @@
 import gymnasium as gym
 import numpy as np
 import matplotlib.pyplot as plt
+import os
 
 
 # ================== SETUP ==================
@@ -9,7 +10,7 @@ gamma = 0.95
 epsilon = 0.3
 max_steps = 200
 num_of_ind_runs = 25
-
+os.makedirs("results", exist_ok=True)
 
 # ================== ACTION CHOICE ==================
 def choose_action(env, qtable, state):
@@ -94,7 +95,7 @@ def run_q_learning(is_slippery=False, num_episodes=1000, reward_type="base"):
 
 
 # ================== PLOTS ==================
-def draw_plot(averaged_reward_base, averaged_reward):
+def draw_plot(averaged_reward_base, averaged_reward, filename):
     fig = plt.figure()
     ax = fig.add_subplot(1, 1, 1)
     ax.spines['left'].set_position('center')
@@ -105,25 +106,29 @@ def draw_plot(averaged_reward_base, averaged_reward):
     ax.yaxis.set_ticks_position('left')
     plt.plot(averaged_reward_base, 'r')
     plt.plot(averaged_reward, 'b')
-    plt.show()
 
+    plt.savefig(filename, dpi=150, bbox_inches='tight')
+    plt.show()
+    plt.close(fig)
 
 # ================== TESTS ==================
 def run_test(is_slippery=False, num_episodes=1000):
+    suffix = "true" if is_slippery else "false"
+
     averaged_reward_base = run_q_learning(is_slippery, num_episodes, "base")
     print("base mean:", np.mean(averaged_reward_base))
 
     averaged_reward = run_q_learning(is_slippery, num_episodes, "base")
     print("base second run mean:", np.mean(averaged_reward))
-    draw_plot(averaged_reward_base, averaged_reward)
+    draw_plot(averaged_reward_base, averaged_reward, f"results/base_vs_base_{suffix}.png")
 
     averaged_reward = run_q_learning(is_slippery, num_episodes, "custom_1")
     print("custom_1 mean:", np.mean(averaged_reward))
-    draw_plot(averaged_reward_base, averaged_reward)
+    draw_plot(averaged_reward_base, averaged_reward, f"results/base_vs_custom1_{suffix}.png")
 
     averaged_reward = run_q_learning(is_slippery, num_episodes, "custom_2")
     print("custom_2 mean:", np.mean(averaged_reward))
-    draw_plot(averaged_reward_base, averaged_reward)
+    draw_plot(averaged_reward_base, averaged_reward, f"results/base_vs_custom2_{suffix}.png")
 
 
 # ================== RUN ==================
