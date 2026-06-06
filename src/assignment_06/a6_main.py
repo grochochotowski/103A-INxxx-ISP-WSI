@@ -111,6 +111,11 @@ def draw_plot(averaged_reward_base, averaged_reward):
 # ================== TESTS ==================
 def run_test(is_slippery=False, num_episodes=1000):
     averaged_reward_base = run_q_learning(is_slippery, num_episodes, "base")
+    print("base mean:", np.mean(averaged_reward_base))
+
+    averaged_reward = run_q_learning(is_slippery, num_episodes, "base")
+    print("base second run mean:", np.mean(averaged_reward))
+    draw_plot(averaged_reward_base, averaged_reward)
 
     averaged_reward = run_q_learning(is_slippery, num_episodes, "custom_1")
     print("custom_1 mean:", np.mean(averaged_reward))
