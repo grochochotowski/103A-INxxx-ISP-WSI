@@ -54,7 +54,8 @@ def run_q_learning(is_slippery=False, num_episodes=1000, reward_type="base"):
     state_size = env.observation_space.n
     action_size = env.action_space.n
 
-    averaged_reward = np.zeros(num_episodes)
+    rewards_per_episode = np.zeros((num_of_ind_runs, num_episodes))
+    final_rewards = np.zeros(num_of_ind_runs)
 
     for run in range(num_of_ind_runs):
         qtable = np.zeros((state_size, action_size))
@@ -77,21 +78,30 @@ def run_q_learning(is_slippery=False, num_episodes=1000, reward_type="base"):
                     target = q_reward + gamma * np.max(qtable[next_state])
 
                 qtable[state, action] = qtable[state, action] + alpha * (
-                        target - qtable[state, action]
+                    target - qtable[state, action]
                 )
 
                 state = next_state
-                reward = reward + step_reward
+                reward += step_reward
 
                 if done:
                     break
 
-            averaged_reward[episode] = averaged_reward[episode] + reward
+            rewards_per_episode[run, episode] = reward
 
-    averaged_reward = averaged_reward / (num_of_ind_runs)
+        final_rewards[run] = np.mean(rewards_per_episode[run])
+
+    averaged_reward = np.mean(rewards_per_episode, axis=0)
+
+    stats = {
+        "min": np.min(final_rewards),
+        "mean": np.mean(final_rewards),
+        "std": np.std(final_rewards),
+        "max": np.max(final_rewards),
+    }
 
     env.close()
-    return averaged_reward
+    return averaged_reward, stats
 
 
 # ================== PLOTS ==================
@@ -112,23 +122,49 @@ def draw_plot(averaged_reward_base, averaged_reward, filename):
     plt.close(fig)
 
 # ================== TESTS ==================
+def print_stats(name, stats):
+    print(
+        f"{name}: "
+        f"min={stats['min']:.6f}, "
+        f"mean={stats['mean']:.6f}, "
+        f"std={stats['std']:.6f}, "
+        f"max={stats['max']:.6f}"
+    )
+
+
 def run_test(is_slippery=False, num_episodes=1000):
     suffix = "true" if is_slippery else "false"
 
-    averaged_reward_base = run_q_learning(is_slippery, num_episodes, "base")
-    print("base mean:", np.mean(averaged_reward_base))
+    print("\n==============================")
+    print(f"is_slippery={is_slippery}, episodes={num_episodes}")
+    print("==============================")
 
-    averaged_reward = run_q_learning(is_slippery, num_episodes, "base")
-    print("base second run mean:", np.mean(averaged_reward))
-    draw_plot(averaged_reward_base, averaged_reward, f"results/base_vs_base_{suffix}.png")
+    averaged_reward_base, stats_base = run_q_learning(is_slippery, num_episodes, "base")
+    print_stats("base", stats_base)
 
-    averaged_reward = run_q_learning(is_slippery, num_episodes, "custom_1")
-    print("custom_1 mean:", np.mean(averaged_reward))
-    draw_plot(averaged_reward_base, averaged_reward, f"results/base_vs_custom1_{suffix}.png")
+    averaged_reward_base_second, stats_base_second = run_q_learning(is_slippery, num_episodes, "base")
+    print_stats("base second run", stats_base_second)
+    draw_plot(
+        averaged_reward_base,
+        averaged_reward_base_second,
+        f"results/base_vs_base_{suffix}.png"
+    )
 
-    averaged_reward = run_q_learning(is_slippery, num_episodes, "custom_2")
-    print("custom_2 mean:", np.mean(averaged_reward))
-    draw_plot(averaged_reward_base, averaged_reward, f"results/base_vs_custom2_{suffix}.png")
+    averaged_reward_custom_1, stats_custom_1 = run_q_learning(is_slippery, num_episodes, "custom_1")
+    print_stats("custom_1", stats_custom_1)
+    draw_plot(
+        averaged_reward_base,
+        averaged_reward_custom_1,
+        f"results/base_vs_custom1_{suffix}.png"
+    )
+
+    averaged_reward_custom_2, stats_custom_2 = run_q_learning(is_slippery, num_episodes, "custom_2")
+    print_stats("custom_2", stats_custom_2)
+    draw_plot(
+        averaged_reward_base,
+        averaged_reward_custom_2,
+        f"results/base_vs_custom2_{suffix}.png"
+    )
 
 
 # ================== RUN ==================
