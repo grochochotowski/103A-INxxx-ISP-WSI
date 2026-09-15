@@ -10,7 +10,7 @@ Repository containing assignments and projects developed for the **Introduction 
 .
 ├── src/
 │   ├── assignment_01/
-│   │   ├── backpack-problem/
+│   │   ├── knapsack_problem/
 │   │   └── steepest-descent/
 │   ├── assignment_02/
 │   ├── assignment_03/
@@ -35,6 +35,16 @@ Repository containing assignments and projects developed for the **Introduction 
 - `src/assignment_05/` — Two-layer perceptron for nonlinear function approximation using backpropagation, including analysis of hidden layer size influence on approximation quality and evaluation using MSE, RMSE, and MAE metrics.
 - `src/assignment_06/` — Q-Learning algorithm applied to the FrozenLake8x8 environment. Includes comparison of different reward systems, analysis of learning performance with and without environment stochasticity (slippery mode), and evaluation based on averaged rewards over multiple independent runs.
 - `src/assignment_07/` — Bayesian network-based synthetic data generation and classification using a previously implemented classifier.
+
+## 📊 Data sources
+
+Assignment 4 uses two datasets from the UCI Machine Learning Repository:
+
+- [Breast Cancer](https://archive.ics.uci.edu/dataset/14/breast+cancer), originally provided by the University Medical Centre, Institute of Oncology in Ljubljana
+- [Mushroom](https://archive.ics.uci.edu/dataset/73/mushroom), based on records from *The Audubon Society Field Guide to North American Mushrooms*
+
+The original dataset descriptions and citation information are preserved in the corresponding `.names` files.
+
 ---
 
 ## 🛠 Setup & Installation
@@ -59,8 +69,9 @@ If you are running this on macOS and the GUI does not launch, you must install t
 ```
 brew install python-tk@3.12
 ```
-**4. External Libraries (CEC2017)**
-Project uses external library CEC2017, to install it you need to go into the steepest_descent folder and clone the library from git
+### 3. External library: CEC2017
+
+Assignments 1 and 2 use the external CEC2017 benchmark library. Clone it and copy its Python package into `src`:
 ```
 cd src
 git clone https://github.com/lukaa12/cec2017-py.git
@@ -82,12 +93,11 @@ python3 -m src.assignment_XX.[rest_of_the_path_to_starting_file]
   * right-click the `src` -> `Mark Directory as` -> `Sources Root`.
 
 **For each assignment do the following steps:**
-* Configure Run Profile:
+* Configure a run profile:
   * Change `Script` to `Module` in the dropdown menu next to the source path field
-  * Use the dotted path (e.g., src.assignment_01.steepest_descent.a2_gui).
+  * Use the dotted path (e.g., `src.assignment_01.steepest_descent.a1b_gui`).
 * `PYTHONPATH`: Ensure following options are enabled:
   * `Add content roots to PYTHONPATH`
   * `Add source roots to PYTHONPATH`
 
 ---
-
